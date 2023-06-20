@@ -1,8 +1,6 @@
 import os
-import time
 import uvicorn
 import asyncio
-# import telegram
 from dataclasses import dataclass
 
 from sarufi import Sarufi
@@ -36,7 +34,8 @@ load_dotenv()
 # Set up Sarufi and get bot's name
 sarufi = Sarufi(api_key=os.environ["sarufi_api_key"])
 bot_name=sarufi.get_bot(os.environ["sarufi_bot_id"]).name
-
+# set base url for webook
+BASE_URL = "https://"
 
 @dataclass
 class WebhookUpdate:
@@ -126,8 +125,6 @@ async def help(update: Update, context: CallbackContext)->None:
   await reply_with_typing(update, context, "Help message")
 
 
-url = "https://7c82-102-64-70-79.ngrok-free.app"
-
 async def main() -> None:
     """Set up the application and a custom webserver."""
     
@@ -144,8 +141,8 @@ async def main() -> None:
     application.add_handler(CallbackQueryHandler(button_click))
 
     # Pass webhook settings to telegram
-    set_url=f"{url}/telegram"
-    await application.bot.set_webhook(url=set_url)
+    url=f"{BASE_URL}/telegram"
+    await application.bot.set_webhook(url=url)
 
     # Set up webserver
     async def telegram(request: Request) -> Response:

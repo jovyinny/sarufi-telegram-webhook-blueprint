@@ -1,10 +1,16 @@
-<samp>
-
 # Sarufi Telegram chatbot blueprint
 
-A blueprint for deploying telegram bots made using [Sarufi](https://docs.sarufi.io/)
+A blueprint for deploying telegram bots made using [Sarufi](https://docs.sarufi.io/). We need a webhook for this task to receive updates from telegram. You can use any of available solutions online. We shall cover setting up webhook using [ngrok](#using-ngrok) and replit.
 
-## GETTING READY
+## Why use webhook instead of polling?
+
+Using polling may render some delays and consume resorces. So you can use webhook for your chatbot to get rid of delays. Your chatbot will process the requests in time.
+
+## USING NGROK
+
+Make sure you have [ngrok]("https://ngrok.com") installed in your local machine.
+
+### Getting ready
 
 - Create Project directory
 
@@ -31,7 +37,7 @@ A blueprint for deploying telegram bots made using [Sarufi](https://docs.sarufi.
 
   The command you need is /newbot which leads to several steps. Follow the steps then you will have you `bot's token`
 
-## CONFIGURATION
+### Configuration
 
 In this part, we are going to clone the [Sarufi Telegram Chatbot deployment Blueprint](https://github.com/Neurotech-HQ/telegram-chatbot-blueprint.git) and install the packages.
 
@@ -66,32 +72,33 @@ In this part, we are going to clone the [Sarufi Telegram Chatbot deployment Blue
 
 ## LAUNCH
 
-Its the time you have been waiting for. Lets lauch 🚀 our bot.
+1. Start ngrok
+  
+  ```bash
+  ngrok http 8000
+  ```
 
-```python
-python3 main.py
-```
+  **NOTE:** The port number(for this case, 8000) matches the port used in `main.py`
+
+2. Run python script
+  
+  Its the time you have been waiting for. Lets lauch 🚀 our bot.
+
+  ```python
+  python3 main.py
+  ```
+  
+  **NOTE:** All operations are done in activated virtual environment for convience
 
 Open your telegram app, search for your bot --> Send it a text. You can see a sample bot [below](#sample-bot-test)
 
-**NOTE:** All operations are done in activated virtual environment for convience
 
-## Running in replit
-
-Clone [telegram blueprint](https://replit.com/@neurotechafrica/sarufi-telegram-blueprint) and add your secret keys. Navigate to your tools in replit --> secrets --> add your secret keys
-
-![Replit tools section](img/replit-tools.png)
-
-|Secret key           | value|
-|---                  |---|
-|sarufi_api_key     |Your sarufi API KEY|
-|sarufi_bot_id        | bot id|
-|token                |telegram token|
-|start_message        |Hi {name}, Welcome To {bot_name}, How can i help you|
+### Running in replit
 
 ## Sample Bot test
 
 Here is a sample bot deployed in Telegram
+
 ![Telegram bot sample video](./img/sample.gif)
 
 ## Issues
@@ -106,8 +113,5 @@ If there is something you would like to contribute, from typos to code to docume
 
 All the credits to
 
-1. [kalebu](https://github.com/Kalebu/)
-2. [Jovine](https://github.com/jovyinny)
-3. All other contributors
-
-</samp>
+1. [Jovine](https://github.com/jovyinny)
+2. All other contributors
