@@ -36,6 +36,7 @@ sarufi = Sarufi(api_key=os.environ["sarufi_api_key"])
 bot_name=sarufi.get_bot(os.environ["sarufi_bot_id"]).name
 # set base url for webook
 BASE_URL = "https://"
+PORT = 8000
 
 @dataclass
 class WebhookUpdate:
@@ -128,7 +129,7 @@ async def help(update: Update, context: CallbackContext)->None:
 async def main() -> None:
     """Set up the application and a custom webserver."""
     
-    port = 8000
+    
     context_types = ContextTypes(context=CustomContext)
     application = (
         Application.builder().token(os.getenv("token")).updater(None).context_types(context_types).build()
@@ -160,7 +161,7 @@ async def main() -> None:
     webserver = uvicorn.Server(
         config=uvicorn.Config(
             app=starlette_app,
-            port=port,
+            port=PORT,
             use_colors=False,
             host="127.0.0.1",
             reload=True

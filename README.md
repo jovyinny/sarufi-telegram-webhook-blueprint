@@ -70,13 +70,15 @@ In this part, we are going to clone the [Sarufi Telegram Chatbot deployment Blue
   start_message= Hi {name}, Welcome To {bot_name}, How can i help you
   ```
 
-## LAUNCH
+### Launch
 
 1. Start ngrok
   
   ```bash
   ngrok http 8000
   ```
+
+  You will have a public https url indicating that its forwarding to your `localhost:8000`. Copy the url and paste it in `main.py` at line 38(variable >>**BASE_URL**).
 
   **NOTE:** The port number(for this case, 8000) matches the port used in `main.py`
 
@@ -93,7 +95,7 @@ In this part, we are going to clone the [Sarufi Telegram Chatbot deployment Blue
 Open your telegram app, search for your bot --> Send it a text. You can see a sample bot [below](#sample-bot-test)
 
 
-### Running in replit
+## Running in replit
 
 ## Sample Bot test
 
