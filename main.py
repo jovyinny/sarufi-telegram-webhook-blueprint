@@ -36,7 +36,7 @@ sarufi = Sarufi(api_key=os.getenv["SARUFI_API_KEY"],)
 bot_name=sarufi.get_bot(os.getenv["SARUFI_BOT_ID"]).name
 
 # set base url for webook
-BASE_URL = "https://"
+BASE_URL = os.getenv("BASE_URL")
 PORT = 8000
 
 @dataclass
@@ -133,7 +133,7 @@ async def main() -> None:
     
     context_types = ContextTypes(context=CustomContext)
     application = (
-        Application.builder().token(os.getenv("TELEGRAM_TOKEN")).updater(None).context_types(context_types).build()
+        Application.builder().token(os.getenv("TELEGRAM_BOT_TOKEN")).updater(None).context_types(context_types).build()
     )
 
     # register handlers

@@ -8,7 +8,7 @@ Using polling may render some delays and consume resorces. So you can use webhoo
 
 ## USING NGROK
 
-Make sure you have [ngrok]("https://ngrok.com") installed in your local machine.
+Make sure you have [ngrok](https://ngrok.com) installed in your local machine.
 
 ### Getting ready
 
@@ -39,15 +39,15 @@ Make sure you have [ngrok]("https://ngrok.com") installed in your local machine.
 
 ### Configuration
 
-In this part, we are going to clone the [Sarufi Telegram Chatbot deployment Blueprint](https://github.com/Neurotech-HQ/telegram-chatbot-blueprint.git) and install the packages.
+In this part, we are going to clone the [Sarufi Telegram Chatbot deployment Blueprint](https://github.com/Neurotech-HQ/sarufi-telegram-webhook-blueprint) and install the packages.
 
 - Clone and install requirements.
 
   Run the commands below
 
   ```bash
-  git clone https://github.com/Neurotech-HQ/telegram-chatbot-blueprint.git
-  cd telegram-chatbot-blueprint
+  git clone https://github.com/Neurotech-HQ/sarufi-telegram-webhook-blueprint.git
+  cd sarufi-telegram-webhook-blueprint
   pip3 install -r requirements.txt
   ```
 
@@ -61,20 +61,23 @@ In this part, we are going to clone the [Sarufi Telegram Chatbot deployment Blue
 
   After installing packages, we need to configure our credentials. In `telegram-chatbot-blueprint`, create a file(`.env`) to hold environment variables.
 
-  In `.env`, we are going to add the following credetials. Using your favourite text editor add the following:-
+  In `.env`, we are going to add the following credetials. To get your public ngrok url read [here](#get-public-url) Using your favourite text editor add the following:-
 
   ```text
   SARUFI_API_KEY = your API KEY
   SARUFI_BOT_ID= bot id
   TELEGRAM_TOKEN = telegram token
   START_MESSAGE= Hi {name}, Welcome To {bot_name}, How can i help you
+  BASE_URL=your ngrok https url
   ```
 
-  **NOTE:** Do not replace `name` na `bot_name` here, they will be programmatically in the script
+  **NOTE:** Do not replace `name` na `bot_name` here, they will be be placed automatically in the script
 
 ### Launch
 
-1. Start ngrok
+#### Get public url
+
+Starting ngrok
   
   ```bash
   ngrok http 8000
@@ -84,7 +87,9 @@ In this part, we are going to clone the [Sarufi Telegram Chatbot deployment Blue
 
   **NOTE:** The port number(for this case, 8000) matches the port used in `main.py`
 
-2. Run python script
+#### Running your bot
+
+Run python script
   
   Its the time you have been waiting for. Lets lauch 🚀 our bot. Here depending on your `os`. You can run
 
@@ -104,7 +109,7 @@ Open your telegram app, search for your bot --> Send it a text. You can see a sa
 
 ## USING REPLIT
 
-Have an account at [replit]("https://replit.com"). what you need is to fork the [blueprint repl]("https://replit.com/@neurotechafrica/sarufi-telegram-webhook-blueprint) into your replit account.
+Have an account at [replit](https://replit.com). what you need is to fork the [blueprint repl](https://replit.com/@neurotechafrica/sarufi-telegram-webhook-blueprint) into your replit account.
 
 ### Quick configuration
 
@@ -128,13 +133,14 @@ You will have to make little configuration to get you bot up running.
 
   In your repl, on the left lower part, `Tool section`. click **secrets** to add your environment variables.
 
-  Add the following secretes
+  Add the following secretes. Get your _BASE_URL_ [here](#fire-up-the-bot)
 
   ```text
   SARUFI_API_KEY = your API KEY
   SARUFI_BOT_ID= bot id
-  TELEGRAM_TOKEN = telegram token
+  TELEGRAM_BOT_TOKEN = telegram bot token
   START_MESSAGE= Hi {name}, Welcome To {bot_name}, How can i help you
+  BASE_URL= https://<your repl name>.<your replit username>.repl.co
   ```
 
   **NOTE:** Do not replace `name` na `bot_name` here, they will be programmatically in the script
