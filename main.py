@@ -32,8 +32,8 @@ from utils import (
 load_dotenv()
 
 # Set up Sarufi and get bot's name
-sarufi = Sarufi(api_key=os.getenv["SARUFI_API_KEY"],)
-bot_name=sarufi.get_bot(os.getenv["SARUFI_BOT_ID"]).name
+sarufi = Sarufi(api_key=os.getenv("SARUFI_API_KEY"),)
+bot_name=sarufi.get_bot(os.getenv("SARUFI_BOT_ID").name
 
 # set base url for webook
 BASE_URL = os.getenv("BASE_URL")
@@ -66,7 +66,7 @@ async def respond(message, chat_id,message_type="text")->dict:
   """
   Responds to the user's message.
   """
-  response = sarufi.chat(os.getenv["SARUFI_BOT_ID"], chat_id, message,channel="whatsapp",message_type= message_type)
+  response = sarufi.chat(os.getenv("SARUFI_BOT_ID"), chat_id, message,channel="whatsapp",message_type= message_type)
   response = response.get("actions")
   return response
 
@@ -116,7 +116,7 @@ async def start(update: Update, context: CustomContext)->None:
   await reply_with_typing(
       update,
       context,
-      os.getenv["start_message"].format(name=first_name,bot_name=bot_name),
+      os.getenv("start_message").format(name=first_name,bot_name=bot_name),
   )
 
 
