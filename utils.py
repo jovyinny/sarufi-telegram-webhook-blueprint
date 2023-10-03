@@ -66,8 +66,8 @@ async def send_medias(update: Update,context: CallbackContext,media:dict,type:st
 
 async def send_response(update:Update,context,message):
    
-   chat_id=update.effective_chat.id
-   if isinstance(message,dict) or isinstance(message,list):
+  chat_id=update.effective_chat.id
+  if isinstance(message,dict) or isinstance(message,list):
 
     for action in (message):
       if action.get("send_message") and not action["send_message"]==['']:
@@ -116,8 +116,8 @@ async def send_response(update:Update,context,message):
       else:
         logger.error("Unkown action")
 
-    else:
-        await context.bot.send_message(chat_id=chat_id, text=message)
+  else:
+      await context.bot.send_message(chat_id=chat_id, text=message)
 
 async def simulate_typing(update: Update, context: CallbackContext)->None:
   await context.bot.send_chat_action(
