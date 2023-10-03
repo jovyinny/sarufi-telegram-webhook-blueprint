@@ -66,7 +66,7 @@ In this part, we are going to clone the [Sarufi Telegram Chatbot deployment Blue
   ```text
   SARUFI_API_KEY = your API KEY
   SARUFI_BOT_ID= bot id
-  TELEGRAM_TOKEN = telegram token
+  TELEGRAM_BOT_TOKEN = telegram token
   START_MESSAGE= Hi {name}, Welcome To {bot_name}, How can i help you
   BASE_URL=your ngrok https url
   ```
