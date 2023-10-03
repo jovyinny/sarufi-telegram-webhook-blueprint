@@ -32,7 +32,7 @@ from utils import (
 load_dotenv()
 
 # Set up Sarufi and get bot's name
-sarufi = Sarufi(api_key=os.getenv("SARUFI_API_KEY"),)
+sarufi = Sarufi(api_key=os.getenv("SARUFI_API_KEY"))
 bot_name=sarufi.get_bot(os.getenv("SARUFI_BOT_ID")).name
 
 # set base url for webook
