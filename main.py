@@ -150,7 +150,7 @@ async def main() -> None:
 
     starlette_app = Starlette(
         routes=[
-            Route("/telegram", telegram, methods=["POST"]),
+            Route("/", telegram, methods=["POST"]),
         ]
     )
     webserver = uvicorn.Server(
