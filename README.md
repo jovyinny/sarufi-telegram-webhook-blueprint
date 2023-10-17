@@ -68,7 +68,6 @@ In this part, we are going to clone the [Sarufi Telegram Chatbot deployment Blue
   SARUFI_BOT_ID= bot id
   TELEGRAM_BOT_TOKEN = telegram token
   START_MESSAGE= Hi {name}, Welcome To {bot_name}, How can i help you
-  BASE_URL=your ngrok https url
   ```
 
   **NOTE:** Do not replace `name` na `bot_name` here, they will be be placed automatically in the script
@@ -77,13 +76,24 @@ In this part, we are going to clone the [Sarufi Telegram Chatbot deployment Blue
 
 #### Get public url
 
-Starting ngrok
+- Starting ngrok
   
   ```bash
   ngrok http 8000
   ```
 
-  You will have a public https url indicating that its forwarding to your `localhost:8000`. Copy the url and paste it in `main.py` at line _39_(variable >>**BASE_URL**).
+  You will have a public https url indicating that its forwarding to your `localhost:8000`
+
+- Set Webhook Url via Telegram API
+
+Using any of favourate API testing client or curl, set the webhook url as shown below
+
+```bash
+curl --location --request POST 'https://api.telegram.org/bot<your bot token>/setWebhook=<your ngrok public url>/telegram' \
+--header 'Content-Type: application/json' \
+```
+ You can read more on [telegram webhook](https://core.telegram.org/bots/api#setwebhook)
+
 
   **NOTE:** The port number(for this case, 8000) matches the port used in `main.py`
 

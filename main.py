@@ -35,8 +35,6 @@ load_dotenv()
 sarufi = Sarufi(api_key=os.getenv("SARUFI_API_KEY"))
 bot_name=sarufi.get_bot(os.getenv("SARUFI_BOT_ID")).name
 
-# set base url for webook
-BASE_URL = os.getenv("BASE_URL")
 PORT = 8000
 
 @dataclass
@@ -141,10 +139,6 @@ async def main() -> None:
     application.add_handler(CommandHandler("help", help))
     application.add_handler(MessageHandler(filters.TEXT, echo))
     application.add_handler(CallbackQueryHandler(button_click))
-
-    # Pass webhook settings to telegram
-    url=f"{BASE_URL}/telegram"
-    await application.bot.set_webhook(url=url)
 
     # Set up webserver
     async def telegram(request: Request) -> Response:
