@@ -89,8 +89,7 @@ In this part, we are going to clone the [Sarufi Telegram Chatbot deployment Blue
 Using any of favourate API testing client or curl, set the webhook url as shown below
 
 ```bash
-curl --location --request POST 'https://api.telegram.org/bot<your bot token>/setWebhook=<your ngrok public url>/telegram' \
---header 'Content-Type: application/json' \
+curl --location --request POST 'https://api.telegram.org/bot<your bot token>/setWebhook?url=<your ngrok public url>/telegram'
 ```
  You can read more on [telegram webhook](https://core.telegram.org/bots/api#setwebhook)
 
