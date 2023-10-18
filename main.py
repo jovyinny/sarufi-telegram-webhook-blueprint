@@ -1,13 +1,8 @@
 import os
 import uvicorn
-import asyncio
+from sarufi import Sarufi
 from dataclasses import dataclass
 
-from sarufi import Sarufi
-from starlette.routing import Route
-from starlette.requests import Request
-from starlette.applications import Starlette
-from starlette.responses import Response
 from telegram import (
     Update,
     ReplyKeyboardRemove
@@ -15,13 +10,16 @@ from telegram import (
 from telegram.ext import (
     Application,
     CallbackContext,
-    CommandHandler,
     ContextTypes,
-    ExtBot,
-    filters,
-    MessageHandler,
-    CallbackQueryHandler
+    ExtBot
 )
+from fastapi import (
+   FastAPI,
+   Request,
+   BackgroundTasks,
+   Response,
+   status)
+
 from dotenv import load_dotenv
 
 from utils import (
@@ -29,12 +27,13 @@ from utils import (
    simulate_typing,
   get_clicked_button_text)
 
+app = FastAPI()
+
 load_dotenv()
 
 # Set up Sarufi and get bot's name
 sarufi = Sarufi(api_key=os.getenv("SARUFI_API_KEY"))
 bot_name=sarufi.get_bot(os.getenv("SARUFI_BOT_ID")).name
-
 PORT = 8000
 
 @dataclass
@@ -57,7 +56,6 @@ class CustomContext(CallbackContext[ExtBot, dict, dict, dict]):
         if isinstance(update, WebhookUpdate):
             return cls(application=application, user_id=update.user_id)
         return super().from_update(update, application)
-
 
 
 async def respond(message, chat_id,message_type="text")->dict:
@@ -132,48 +130,29 @@ application = (
     Application.builder().token(os.getenv("TELEGRAM_BOT_TOKEN")).updater(None).context_types(context_types).build()
 )
 
+@app.get("/")
+async def webhook(request: Request):
+    return Response(content="Webhook--Ok",status_code=status.HTTP_200_OK)
 
 
-async def telegram(request: Request) -> Response:
-    """Handle incoming Telegram updates by putting them into the `update_queue`"""
-    await application.update_queue.put(
-        Update.de_json(data=await request.json(), bot=application.bot)
-    )
-    return Response()
-
-# 
-app = Starlette(
-        routes=[
-            Route("/", telegram, methods=["POST"]),
-        ]
-    )
-
-async def main() -> None:
-    """Set up the application and a custom webserver."""
+@app.post("/")
+async def webhook_handler(request: Request,tasks: BackgroundTasks):
+    update_data = await request.json()
+    update = Update.de_json(data=update_data, bot=application.bot)
     
-    # register handlers
-    application.add_handler(CommandHandler("start", start))
-    application.add_handler(CommandHandler("help", help))
-    application.add_handler(MessageHandler(filters.TEXT, echo))
-    application.add_handler(CallbackQueryHandler(button_click))
-    
-    # Set up webserver
-    webserver = uvicorn.Server(
-        config=uvicorn.Config(
-            app=app,
-            port=PORT,
-            use_colors=False,
-            host="127.0.0.1",
-            reload=True
-        )
-    )
+    if update.message and update.message.text:
+        # Check for specific commands and call the appropriate command handlers otherwise repond to text
+        if update.message.text.startswith('/start'):
+            await start(update, CustomContext.from_update(update, application))
+        elif update.message.text.startswith('/help'):
+            await help(update, CustomContext.from_update(update, application))
+        else:
+            tasks.add_task(echo,update, CustomContext.from_update(update, application))
+    elif update.callback_query:
+        await button_click(update, CustomContext.from_update(update, application))
 
-    # Run application and webserver together
-    async with application:
-        await application.start()
-        await webserver.serve()
-        await application.stop()
+    return Response(content="OK",status_code=status.HTTP_200_OK)
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    uvicorn.run("main:app", host="0.0.0.0", port=PORT,reload=True)
