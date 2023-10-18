@@ -35,8 +35,6 @@ load_dotenv()
 sarufi = Sarufi(api_key=os.getenv("SARUFI_API_KEY"))
 bot_name=sarufi.get_bot(os.getenv("SARUFI_BOT_ID")).name
 
-# set base url for webook
-BASE_URL = os.getenv("BASE_URL")
 PORT = 8000
 
 @dataclass
@@ -127,41 +125,42 @@ async def help(update: Update, context: CallbackContext)->None:
   await reply_with_typing(update, context, "Help message")
 
 
+
+# Set up application    
+context_types = ContextTypes(context=CustomContext)
+application = (
+    Application.builder().token(os.getenv("TELEGRAM_BOT_TOKEN")).updater(None).context_types(context_types).build()
+)
+
+
+
+async def telegram(request: Request) -> Response:
+    """Handle incoming Telegram updates by putting them into the `update_queue`"""
+    await application.update_queue.put(
+        Update.de_json(data=await request.json(), bot=application.bot)
+    )
+    return Response()
+
+# 
+app = Starlette(
+        routes=[
+            Route("/", telegram, methods=["POST"]),
+        ]
+    )
+
 async def main() -> None:
     """Set up the application and a custom webserver."""
     
-    
-    context_types = ContextTypes(context=CustomContext)
-    application = (
-        Application.builder().token(os.getenv("TELEGRAM_BOT_TOKEN")).updater(None).context_types(context_types).build()
-    )
-
     # register handlers
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("help", help))
     application.add_handler(MessageHandler(filters.TEXT, echo))
     application.add_handler(CallbackQueryHandler(button_click))
-
-    # Pass webhook settings to telegram
-    url=f"{BASE_URL}/telegram"
-    await application.bot.set_webhook(url=url)
-
+    
     # Set up webserver
-    async def telegram(request: Request) -> Response:
-        """Handle incoming Telegram updates by putting them into the `update_queue`"""
-        await application.update_queue.put(
-            Update.de_json(data=await request.json(), bot=application.bot)
-        )
-        return Response()
-
-    starlette_app = Starlette(
-        routes=[
-            Route("/telegram", telegram, methods=["POST"]),
-        ]
-    )
     webserver = uvicorn.Server(
         config=uvicorn.Config(
-            app=starlette_app,
+            app=app,
             port=PORT,
             use_colors=False,
             host="127.0.0.1",
