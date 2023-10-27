@@ -1,6 +1,8 @@
 # Sarufi Telegram-Webhook chatbot blueprint
 
-A blueprint for deploying telegram bots made using [Sarufi](https://docs.sarufi.io/). We need a webhook for this task to receive updates from telegram. You can use any of available solutions online. We shall cover setting up webhook using [ngrok](#using-ngrok) and [replit](#using-replit).
+A blueprint for deploying telegram bots made using [Sarufi](https://docs.sarufi.io/). We need a webhook for this task to receive updates from telegram. Using webhook, we can deploy our chatbot as a lambda function. This way we can save resources and avoid delays.
+
+You can use any of available solutions online. We shall cover setting up webhook using [ngrok](#using-ngrok) and [replit](#using-replit).
 
 ## Why use webhook instead of polling?
 
@@ -10,38 +12,62 @@ Using polling may render some delays and consume resorces. So you can use webhoo
 
 Make sure you have [ngrok](https://ngrok.com) installed in your local machine.
 
-### Getting ready
+You will have to modify some commands shown here to suite your working environment. The commands like `python3` and `pip3` will depend on your working environment. You may have to use `python` and `pip` instead.
 
-- Create Project directory
+### Quick configuration
 
-  Create a project directory `Telegram bot`. In this directory we are going to create a virtual environment to hold our package.
+- Create Project directory and Virtual environment
 
-  ```bash
-  mkdir 'Telegram bot'
-  cd 'Telegram bot'
+  - Create a project directory `Telegram bot`.
+  
+    In this directory we are going to create a virtual environment to hold our package.
 
-  ```
+    ```bash
+    mkdir 'Telegram bot'
+    cd 'Telegram bot'
+    ```
 
-- Make virtual environment and install requirements
+  - Make Virtual Environment
 
-  Using virtual environment is a good practice, so we are going to create one. You can read more on [why use virtual environment](https://www.freecodecamp.org/news/how-to-setup-virtual-environments-in-python/). We shall install all necessary packages in the environment
+    Using virtual environment is a good practice, so we are going to create one. You can read more on [why use virtual environment](https://www.freecodecamp.org/news/how-to-setup-virtual-environments-in-python/). We shall install all necessary packages in the environment
 
-  ```bash
-  python3 -m venv sarufi
-  source sarufi/bin/activate
-  ```
+    - Unix based systems
+      - Install virtual environment
+      
+        This step is optional as you may have python virtual environment already installed. If not, you can install it by running the command below.
 
-- Creating a telegram bot
+        ```bash
+        sudo apt install python3-venv
+        ```
+        
+      - Create virtual environment and activate it
 
-  To create a chatbot on Telegram, you need to contact the [BotFather](https://telegram.me/BotFather), which is essentially a bot used to create other bots.
+        ```bash
+        python3 -m venv sarufi
+        source sarufi/bin/activate
+        ```
 
-  The command you need is /newbot which leads to several steps. Follow the steps then you will have you `bot's token`
+    - Windows
+      - Install virtual environment
 
-### Configuration
+        This step is optional as you may have python virtual environment already installed. If not, you can install it by running the command below.
 
-In this part, we are going to clone the [Sarufi Telegram Chatbot deployment Blueprint](https://github.com/Neurotech-HQ/sarufi-telegram-webhook-blueprint) and install the packages.
+        ```bash
+        pip install virtualenv
+        ```
+
+      - Create virtual environment and activate it
+  
+        ```bash
+        virtualenv sarufi
+        .\sarufi\Scripts\activate
+        ```
+
+### Setting up the project
 
 - Clone and install requirements.
+
+  In this part, we are going to clone the [Sarufi Telegram Chatbot deployment Blueprint](https://github.com/Neurotech-HQ/sarufi-telegram-webhook-blueprint) and install the packages.
 
   Run the commands below
 
@@ -49,19 +75,13 @@ In this part, we are going to clone the [Sarufi Telegram Chatbot deployment Blue
   git clone https://github.com/Neurotech-HQ/sarufi-telegram-webhook-blueprint.git
   cd sarufi-telegram-webhook-blueprint
   pip3 install -r requirements.txt
-  ```
-
-- Getting Sarufi credentials.
-  
-  To authorize our chabot, we are are going to use authorization keys from sarufi. Log in into your [sarufi account](https://sarufi.io). Go to your Profile on account to get Authorization keys(client ID and client secret)
-
-  ![Sarufi authorazation keys](img/sarufi_authorization.png)
+    ```
 
 - Environment variables
 
-  After installing packages, we need to configure our credentials. In `telegram-chatbot-blueprint`, create a file(`.env`) to hold environment variables.
+    After installing packages, we need to configure our credentials. In `telegram-chatbot-blueprint`, create a file(`.env`) to hold environment variables.
 
-  In `.env`, we are going to add the following credetials. To get your public ngrok url read [here](#get-public-url) Using your favourite text editor add the following:-
+    In `.env`, we are going to add the following credetials. To get your public ngrok url read [here](#get-public-url) Using your favourite text editor add the following:-
 
   ```text
   SARUFI_API_KEY = your API KEY
@@ -70,13 +90,40 @@ In this part, we are going to clone the [Sarufi Telegram Chatbot deployment Blue
   START_MESSAGE= Hi {name}, Welcome To {bot_name}, How can i help you
   ```
 
-  **NOTE:** Do not replace `name` na `bot_name` here, they will be be placed automatically in the script
+  **Note**: The Start Message will be bot's reponse when a user sends /start command to your bot.
 
-### Launch
+  You can customize the message to your preference. You have the following variable that you can use in your start message to make it more personalized:-
 
-#### Get public url
+    - {name} - User's name. This is the name the user has on Telegram
+    - {bot_name} - Bot's name from Sarufi Dashboard
 
-- Starting ngrok
+
+### Get Credentials
+
+- Getting Sarufi credentials.
+  
+    To authorize our chabot, we are are going to use authorization keys from sarufi. Log in into your [sarufi account](https://sarufi.io). Go to your Profile on account to get Authorization keys(client ID and client secret)
+
+    ![Sarufi authorazation keys](img/sarufi_authorization.png)
+
+- Creating a telegram bot
+
+  To create a chatbot on Telegram, you need to contact the [BotFather](https://telegram.me/BotFather), which is essentially a bot used to create other bots.
+
+  To connect to Telegram, you need to create a Telegram bot. You can do this by following the instructions in the [Telegram documentation](https://core.telegram.org/bots#6-botfather). The instructions are as follows:
+
+  1. Open Telegram and search for `@BotFather`.
+  2. Click on the bot to start a chat.
+  3. Send the `/newbot` command to create a new bot.
+  4. Follow the instructions to create a new bot.
+
+  Once you have created a bot, you will receive a `token`. This token is used to authenticate your bot with Telegram.
+
+### Fire up your bot
+
+- Starting ngrok to get public url
+
+  Ngronk is a tool that allows you to expose a web server running on your local machine to the internet. You can read more on [ngrok](https://ngrok.com)
   
   ```bash
   ngrok http 8000
@@ -84,37 +131,29 @@ In this part, we are going to clone the [Sarufi Telegram Chatbot deployment Blue
 
   You will have a public https url indicating that its forwarding to your `localhost:8000`
 
-- Set Webhook Url via Telegram API
+- Set Webhook Url
 
-Using any of favourate API testing client or curl, set the webhook url as shown below
+  We are going to set the webhook url to our bot. This is telling telegram server to send updates to our bot via specified url. This way our server can rest whenever there is no update. With this option you can deploy your chatbot as a lambda function.
 
-```bash
-curl --location --request POST 'https://api.telegram.org/bot<your bot token>/setWebhook?url=<your ngrok public url>/telegram'
-```
- You can read more on [telegram webhook](https://core.telegram.org/bots/api#setwebhook)
+  Using any of favourate API testing client or curl, set the webhook url as shown below
 
+  ```bash
+  curl --request POST 'https://api.telegram.org/bot<your bot token>/setWebhook?url=<your ngrok public url>'
+  ```
 
   **NOTE:** The port number(for this case, 8000) matches the port used in `main.py`
 
-#### Running your bot
+- Running your bot
 
-Run python script
-  
-  Its the time you have been waiting for. Lets lauch 🚀 our bot. Here depending on your `os`. You can run
+  Run python script. Its the time you have been waiting for. Lets lauch 🚀 our bot. 
 
   ```python
   python3 main.py
   ```
-
-  or
-  
-  ```python
-  python main.py
-  ```
   
   **NOTE:** All operations are done in activated virtual environment for convience
 
-Open your telegram app, search for your bot --> Send it a text. You can see a sample bot [below](#sample-bot-test)
+  Open your telegram app, search for your bot --> Send it a text. You can see a sample bot [below](#chatbot-at-work)
 
 ## USING REPLIT
 
@@ -149,24 +188,38 @@ You will have to make little configuration to get you bot up running.
   SARUFI_BOT_ID= bot id
   TELEGRAM_BOT_TOKEN = telegram bot token
   START_MESSAGE= Hi {name}, Welcome To {bot_name}, How can i help you
-  BASE_URL= https://<your repl name>.<your replit username>.repl.co
   ```
+  **Note**:
 
-  **NOTE:** Do not replace `name` na `bot_name` here, they will be programmatically in the script
+  The Start Message will be bot's reponse when a user sends /start command to your bot.
+
+  You can customize the message to your preference. You have the following variable that you can use in your start message to make it more personalized:-
+    - {name} - User's name. This is the name the user has on Telegram
+    - {bot_name} - Bot's name from Sarufi
+
 
 ### Fire up the bot
 
-To launch your bot, you need to add a webhook url, which will be in format of `https://<your repl name>.<your replit username>.co`. In **main.py**, at line _39_ (Variable `BASE_URL`), place your formatted url.
+Click the run button to start your bot. You will see the bot running on the console. A small webview will open up with a url like `https://<your repl name>.<your replit username>.co`. Copy the url as we are going to use it in the next step to set webhook url.
 
-Below you can see where you can find the details in replit. So you will need to replace them with your own info.
+### Set Webhook Url
 
-![Where to find username and repl name](./img/repl-name-and-username-in-replit.png)
+You can use any of favourate API testing client or curl, set the webhook url as shown below.
 
-**Note** Spaces in the repl name will be replaced with with `-`. Example: `sarufi telegram webhook blueprint` is to be placed as `sarufi-telergam-webhook-blueprint` in the url.
+- Using curl
+
+  ```bash
+  curl --request POST 'https://api.telegram.org/bot<your bot token>/setWebhook?url=<your replit url>'
+  ```
+- Using API testing client
+
+  You can use any of your favourate API testing client. I will use [Postman](https://www.postman.com/). 
+  
+  Then send a POST request to `https://api.telegram.org/bot<your bot token>/setWebhook?url=<your replit url>`
 
 Open your telegram app, search for your bot --> Send it a text. You can see a sample bot [below](#sample-bot-test)
 
-## Sample Bot test
+## ChatBot at work
 
 Here is a sample bot deployed in Telegram
 

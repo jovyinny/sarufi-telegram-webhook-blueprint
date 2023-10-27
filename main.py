@@ -126,9 +126,7 @@ async def help(update: Update, context: CallbackContext)->None:
 
 # Set up application    
 context_types = ContextTypes(context=CustomContext)
-application = (
-    Application.builder().token(os.getenv("TELEGRAM_BOT_TOKEN")).updater(None).context_types(context_types).build()
-)
+application = Application.builder().token(os.getenv("TELEGRAM_BOT_TOKEN")).updater(None).context_types(context_types).build()
 
 @app.get("/")
 async def webhook(request: Request):
@@ -155,4 +153,4 @@ async def webhook_handler(request: Request,tasks: BackgroundTasks):
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=PORT,reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=PORT)
