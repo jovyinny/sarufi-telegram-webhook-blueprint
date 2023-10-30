@@ -31,10 +31,20 @@ app = FastAPI()
 
 load_dotenv()
 
+# Check if all required environment variables are set
+if os.getenv("TELEGRAM_TOKEN") is None:
+  raise ValueError("TELEGRAM_TOKEN is not set")
+if os.getenv("SARUFI_API_KEY") is None:
+  raise ValueError("SARUFI_API_KEY is not set")
+if os.getenv("SARUFI_BOT_ID") is None:
+  raise ValueError("SARUFI_BOT_ID is not set")
+if os.getenv("START_MESSAGE") is None:
+  raise ValueError("START_MESSAGE is not set")
+
 # Set up Sarufi and get bot's name
 sarufi = Sarufi(api_key=os.getenv("SARUFI_API_KEY"))
 bot_name=sarufi.get_bot(os.getenv("SARUFI_BOT_ID")).name
-PORT = 8000
+PORT = os.getenv("PORT", 8000)
 
 @dataclass
 class WebhookUpdate:
@@ -153,4 +163,4 @@ async def webhook_handler(request: Request,tasks: BackgroundTasks):
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=PORT)
+    uvicorn.run("main:app",port=PORT)
