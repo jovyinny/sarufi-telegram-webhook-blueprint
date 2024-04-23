@@ -33,13 +33,13 @@ You will have to modify some commands shown here to suite your working environme
 
     - Unix based systems
       - Install virtual environment
-      
+
         This step is optional as you may have python virtual environment already installed. If not, you can install it by running the command below.
 
         ```bash
         sudo apt install python3-venv
         ```
-        
+
       - Create virtual environment and activate it
 
         ```bash
@@ -87,16 +87,15 @@ You will have to modify some commands shown here to suite your working environme
   SARUFI_API_KEY = your API KEY
   SARUFI_BOT_ID= bot id
   TELEGRAM_BOT_TOKEN = telegram token
-  START_MESSAGE= Hi {name}, Welcome To {bot_name}, How can i help you
+  START_MESSAGE= Hi {user_name}, Welcome To {bot_name}, How can i help you
   ```
 
   **Note**: The Start Message will be bot's reponse when a user sends /start command to your bot.
 
   You can customize the message to your preference. You have the following variable that you can use in your start message to make it more personalized:-
 
-    - {name} - User's name. This is the name the user has on Telegram
-    - {bot_name} - Bot's name from Sarufi Dashboard
-
+  - {name} - User's name. This is the name the user has on Telegram
+  - {bot_name} - Bot's name from Sarufi Dashboard
 
 ### Get Credentials
 
@@ -145,7 +144,7 @@ You will have to modify some commands shown here to suite your working environme
 
 - Running your bot
 
-  Run python script. Its the time you have been waiting for. Lets lauch 🚀 our bot. 
+  Run python script. Its the time you have been waiting for. Lets lauch 🚀 our bot.
 
   ```python
   python3 main.py
@@ -189,14 +188,14 @@ You will have to make little configuration to get you bot up running.
   TELEGRAM_BOT_TOKEN = telegram bot token
   START_MESSAGE= Hi {user_name}, Welcome To {bot_name}, How can i help you
   ```
+
   **Note**:
 
   The Start Message will be bot's reponse when a user sends /start command to your bot.
 
   You can customize the message to your preference. You have the following variable that you can use in your start message to make it more personalized:-
-    - {user_name} - User's name. This is the name the user has on Telegram
-    - {bot_name} - Bot's name from Sarufi
-
+  - {user_name} - User's name. This is the name the user has on Telegram
+  - {bot_name} - Bot's name from Sarufi
 
 ### Fire up the bot
 
@@ -211,9 +210,10 @@ You can use any of favourate API testing client or curl, set the webhook url as 
   ```bash
   curl --request POST 'https://api.telegram.org/bot<your bot token>/setWebhook?url=<your replit url>'
   ```
+
 - Using API testing client
 
-  You can use any of your favourate API testing client. I will use [Postman](https://www.postman.com/). 
+  You can use any of your favourate API testing client. I will use [Postman](https://www.postman.com/).
   
   Then send a POST request to `https://api.telegram.org/bot<your bot token>/setWebhook?url=<your replit url>`
 
