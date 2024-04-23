@@ -27,19 +27,19 @@ from utils import (
    simulate_typing,
   get_clicked_button_text)
 
+from logger import logger
+
+
 app = FastAPI()
 
 load_dotenv()
 
 # Check if all required environment variables are set
-if os.getenv("TELEGRAM_TOKEN") is None:
-  raise ValueError("TELEGRAM_TOKEN is not set")
-if os.getenv("SARUFI_API_KEY") is None:
-  raise ValueError("SARUFI_API_KEY is not set")
-if os.getenv("SARUFI_BOT_ID") is None:
-  raise ValueError("SARUFI_BOT_ID is not set")
-if os.getenv("START_MESSAGE") is None:
-  raise ValueError("START_MESSAGE is not set")
+
+assert os.getenv("TELEGRAM_BOT_TOKEN") , "TELEGRAM_BOT_TOKEN not set"
+assert os.getenv("SARUFI_API_KEY"), "SARUFI_API_KEY not set"
+assert os.getenv("SARUFI_BOT_ID"), "SARUFI_BOT_ID not set"
+assert os.getenv("START_MESSAGE"), "START_MESSAGE not set"
 
 # Set up Sarufi and get bot's name
 sarufi = Sarufi(api_key=os.getenv("SARUFI_API_KEY"))
@@ -118,12 +118,17 @@ async def start(update: Update, context: CustomContext)->None:
   """
   Starts the bot.
   """
-  first_name = update.message.chat.first_name
-  await reply_with_typing(
-      update,
-      context,
-      os.getenv("START_MESSAGE").format(name=first_name,bot_name=bot_name),
-  )
+  try:
+
+    first_name = update.message.chat.first_name
+    await reply_with_typing(
+        update,
+        context,
+        os.getenv("START_MESSAGE","Welcome to {bot_name}").format(user_name=first_name,bot_name=bot_name),
+    )
+  except Exception as error:
+    logger.error(f"Error: {error} starting the bot")
+    await reply_with_typing(update, context, "Welcome to the bot")
 
 
 async def help(update: Update, context: CallbackContext)->None:

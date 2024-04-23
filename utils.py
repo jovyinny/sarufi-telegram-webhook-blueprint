@@ -8,7 +8,7 @@ def get_buttons(data:dict,type:str)->list:
   buttons=[]
   if type=="reply_button":
     
-    for button in data.get("buttons"):
+    for button in data["buttons"]:
       button_title=button.get("reply").get("title")
       button_id=button.get("reply").get("id")
       button_data=[InlineKeyboardButton(button_title,callback_data=button_id)]
@@ -17,7 +17,7 @@ def get_buttons(data:dict,type:str)->list:
   
   else:
     
-    for menu in data.get("sections")[0].get("rows"):
+    for menu in data["sections"][0].get["rows"]:
       menu_title=menu.get("title")
       menu_id=menu.get("id")
       menu_button=[InlineKeyboardButton(menu_title,callback_data=menu_id)]
@@ -29,6 +29,7 @@ def get_clicked_button_text(buttons:tuple,button_callback_data:str)-> str:
   for button in buttons:
     if button[0].callback_data==button_callback_data:
       return button[0].text
+  return "Sorry, I can't find the button you clicked"
 
 
 async def send_medias(update: Update,context: CallbackContext,media:dict,type:str):

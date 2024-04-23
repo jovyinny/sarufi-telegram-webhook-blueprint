@@ -1,5 +1,5 @@
 python-telegram-bot==20.2
 python-dotenv==1.0.0
-sarufi==0.1.7
+sarufi==0.1.9
 uvicorn==0.23.2
 fastapi==0.103.2
