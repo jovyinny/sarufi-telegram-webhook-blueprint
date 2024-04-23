@@ -187,14 +187,14 @@ You will have to make little configuration to get you bot up running.
   SARUFI_API_KEY = your API KEY
   SARUFI_BOT_ID= bot id
   TELEGRAM_BOT_TOKEN = telegram bot token
-  START_MESSAGE= Hi {name}, Welcome To {bot_name}, How can i help you
+  START_MESSAGE= Hi {user_name}, Welcome To {bot_name}, How can i help you
   ```
   **Note**:
 
   The Start Message will be bot's reponse when a user sends /start command to your bot.
 
   You can customize the message to your preference. You have the following variable that you can use in your start message to make it more personalized:-
-    - {name} - User's name. This is the name the user has on Telegram
+    - {user_name} - User's name. This is the name the user has on Telegram
     - {bot_name} - Bot's name from Sarufi
 
 
